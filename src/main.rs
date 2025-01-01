@@ -1,14 +1,16 @@
 use std::error::Error;
-use serde::{Serialize};
+use serde::{Serialize,Deserialize};
 use plotly::common::Mode;
 use plotly::{ImageFormat, Plot, Scatter};
 use chrono::{};
 
+const FILE_PATH: &str =  "csv_test.csv";
+
 // The record we will use to write onto the csv
-#[derive(Serialize,Clone)]
+#[derive(Serialize,Deserialize,Clone)]
 struct Record {
     timestamp: String,
-    value: i32,
+    value: f32,
 }
 
 struct FirFilter{
@@ -28,15 +30,23 @@ fn main() -> Result<(), Box<dyn Error>>  {
     // Initialize the plot
     let mut plot = Plot::new();
     let mut x_values: Vec<String> = vec![];
-    let mut y_values: Vec<i32> = vec![];
+    let mut y_values: Vec<f32> = vec![];
 
     // Read the data (For now the data is read at once and then processed, this will be done concurrently later on)
+    let mut reader = csv::Reader::from_path(FILE_PATH).unwrap();
 
     // Process the data
     let mut filter = FirFilter{
         last_value: 0_f32,
         alpha: 0.9
     };
+    for result in reader.deserialize() {
+        let record: Record = result?;
+        let filtered_value = filter.filter_new_value(record.value);   
+        //let filtered_value = record.value;   
+        x_values.push(record.timestamp);
+        y_values.push(filtered_value);
+    }
 
     // Create an empty Scatter trace
     let trace = Scatter::new(x_values, y_values)
@@ -48,4 +58,5 @@ fn main() -> Result<(), Box<dyn Error>>  {
     plot.show();
     
     Ok(())
+
 }
