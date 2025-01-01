@@ -1,9 +1,7 @@
-use std::{fmt::write, fs::File};
 use csv::{Writer};
 use serde::{Serialize};
-use chrono::{format, DateTime, TimeZone, Utc};
+use chrono::{DateTime, TimeZone, Utc};
 use rand::{Rng};
-use std::f64::consts::PI;
 
 // Global const parameters
 const TIMESTAMP_STEP_IN_HOURS: u32 = 1;
@@ -29,42 +27,42 @@ struct Record {
 
 // Static sine lookup table for common angles in degrees.
 const SINE_LOOKUP_TABLE: [f32; 36] = [
-    0.0, // 0 degrees
-    0.17364817766693033, // 10 degrees
-    0.3420201433256687, // 20 degrees
-    0.49999999999999994, // 30 degrees
-    0.6427876096865393, // 40 degrees
-    0.766044443118978, // 50 degrees
-    0.8660254037844387, // 60 degrees
-    0.9396926207859084, // 70 degrees
-    0.984807753012208, // 80 degrees
-    1.0, // 90 degrees
-    0.984807753012208, // 100 degrees
-    0.9396926207859084, // 110 degrees
-    0.8660254037844387, // 120 degrees
-    0.766044443118978, // 130 degrees
-    0.6427876096865393, // 140 degrees
-    0.49999999999999994, // 150 degrees
-    0.3420201433256687, // 160 degrees
-    0.17364817766693033, // 170 degrees
-    0.0, // 180 degrees
-    -0.17364817766693033, // 190 degrees
-    -0.3420201433256687, // 200 degrees
-    -0.49999999999999994, // 210 degrees
-    -0.6427876096865393, // 220 degrees
-    -0.766044443118978, // 230 degrees
-    -0.8660254037844387, // 240 degrees
-    -0.9396926207859084, // 250 degrees
-    -0.984807753012208, // 260 degrees
-    -1.0, // 270 degrees
-    -0.984807753012208, // 280 degrees
-    -0.9396926207859084, // 290 degrees
-    -0.8660254037844387, // 300 degrees
-    -0.766044443118978, // 310 degrees
-    -0.6427876096865393, // 320 degrees
-    -0.49999999999999994, // 330 degrees
-    -0.3420201433256687, // 340 degrees
-    -0.17364817766693033, // 350 degrees
+    0.0,            // 0 degrees
+    0.173_648_1,    // 10 degrees
+    0.342_020_1,    // 20 degrees
+    0.5,            // 30 degrees
+    0.642_787_6,    // 40 degrees
+    0.766_044_4,    // 50 degrees
+    0.866_025_4,    // 60 degrees
+    0.939_692_6,    // 70 degrees
+    0.984_807_7,    // 80 degrees
+    1.0,            // 90 degrees
+    0.984_807_7,    // 100 degrees
+    0.939_692_6,    // 110 degrees
+    0.866_025_4,    // 120 degrees
+    0.766_044_4,    // 130 degrees
+    0.642_787_6,    // 140 degrees
+    0.5,            // 150 degrees
+    0.342_020_1,    // 160 degrees
+    0.173_648_1,    // 170 degrees
+    0.0,            // 180 degrees
+   -0.173_648_1,    // 190 degrees
+   -0.342_020_1,    // 200 degrees
+   -0.5,            // 210 degrees
+   -0.642_787_6,    // 220 degrees
+   -0.766_044_4,    // 230 degrees
+   -0.866_025_4,    // 240 degrees
+   -0.939_692_6,    // 250 degrees
+   -0.984_807_7,    // 260 degrees
+   -1.0,            // 270 degrees
+   -0.984_807_7,    // 280 degrees
+   -0.939_692_6,    // 290 degrees
+   -0.866_025_4,    // 300 degrees
+   -0.766_044_4,    // 310 degrees
+   -0.642_787_6,    // 320 degrees
+   -0.5,            // 330 degrees
+   -0.342_020_1,    // 340 degrees
+   -0.173_648_1,    // 350 degrees
 ];
 
 fn truncate_to_two_decimal_places(value: f32) -> f32 {
@@ -89,7 +87,7 @@ fn main() {
         let value = truncate_to_two_decimal_places(rng.gen_range(MIN_DATA_VALUE..MAX_DATA_VALUE) as f32 + 30_f32*SINE_LOOKUP_TABLE[i as usize % 36]);
         let record = Record{
             timestamp: format_datetime!(DateTime::from_timestamp(timestamp,0).unwrap()),
-            value: value ,
+            value ,
         };
         writer.serialize(record).unwrap();
     }

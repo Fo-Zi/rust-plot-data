@@ -1,8 +1,7 @@
 use std::error::Error;
 use serde::{Serialize,Deserialize};
 use plotly::common::Mode;
-use plotly::{ImageFormat, Plot, Scatter};
-use chrono::{};
+use plotly::{ Plot, Scatter};
 
 const FILE_PATH: &str =  "csv_test.csv";
 
@@ -21,7 +20,7 @@ struct FirFilter{
 impl FirFilter {
     pub fn filter_new_value(&mut self,new_value: f32) -> f32 {
         self.last_value = self.alpha * (self.last_value) + (self.alpha - 1_f32)* (new_value);
-        return self.last_value;
+        self.last_value
     }
 }
 
